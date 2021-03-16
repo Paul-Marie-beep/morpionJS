@@ -1,0 +1,130 @@
+body {
+  margin: 0px;
+  background: linear-gradient(to top left, #18ceee, #5577e6);
+  background-size: cover;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  position: relative;
+}
+
+.hidden {
+  display: none;
+}
+
+.boardgame {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0px;
+  width: 50%;
+  margin: auto;
+  margin-top: 1rem;
+  padding-bottom: 30%;
+}
+
+.case {
+  height: 10rem;
+  width: 10rem;
+  margin: 0px;
+  margin: 0px;
+}
+
+.colrow {
+  font-size: 2rem;
+  color: white;
+  text-align: center;
+  vertical-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.gamecase {
+  background-color: white;
+  border: 2px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.gamecase-display {
+  font-weight: 900;
+  font-size: 6rem;
+}
+
+.border-top {
+  border-top: 4px solid black;
+}
+
+.border-bottom {
+  border-bottom: 4px solid black;
+}
+
+.border-left {
+  border-left: 4px solid black;
+}
+
+.border-right {
+  border-right: 4px solid black;
+}
+
+.player-popups {
+  transform: translateY(-200%);
+}
+
+.playerturn-popup {
+  height: 5rem;
+  width: 60%;
+  background-color: lime;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.player-popup-text {
+  width: fit-content;
+  color: white;
+  font-size: 2.5rem;
+  font-weight: 900;
+}
+
+.popup-container-2 {
+  transform: translateY(-100%);
+}
+
+.player-number {
+  color: red;
+}
+
+.victory-popup {
+  width: 70%;
+  height: 40%;
+  background: linear-gradient(to top left, #f1f505, #fcd706);
+  position: fixed;
+  top: 30%;
+  left: 15%;
+}
+
+.victory-popup-text {
+  width: fit-content;
+  margin: auto;
+}
+
+.victory-popup-text p {
+  width: fit-content;
+}
+
+.victory-popup-btn {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  height: 2rem;
+  background-color: darkblue;
+  color: white;
+  font-weight: 900;
+  width: fit-content;
+  border-radius: 8px;
+}
+
+.victory-popup-btn:hover {
+  cursor: pointer;
+}
