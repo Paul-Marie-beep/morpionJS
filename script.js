@@ -219,7 +219,6 @@ const testForWin = function () {
 const testForEndGame = function () {
   if (winner !== "") return;
   if (turnCount === 9) {
-    console.log("Le jeu est fini");
     showEndgamePopup();
     boardgame.removeEventListener("click", playTurn);
     return true;
@@ -267,10 +266,13 @@ const startGame = function () {
   winner = "";
   showPlayerPopup();
   boardgame.addEventListener("click", playTurn);
+  startPopup.removeEventListener("keydown", launchGame);
 };
 
 const launchGame = function (e) {
-  if (
+  if (e.code === "Enter" && inputPlayer1.value === inputPlayer2.value) {
+    alert("Vous devez rentrer deux prénoms différents");
+  } else if (
     e.code === "Enter" &&
     (inputPlayer1.value !== "" || inputPlayer2.value !== "")
   ) {
