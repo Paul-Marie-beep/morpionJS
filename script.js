@@ -4,10 +4,19 @@ const boardgame = document.querySelector(".boardgame");
 const player1Popup = document.querySelector(".popup-container-1");
 const player2Popup = document.querySelector(".popup-container-2");
 const victoryPopup = document.querySelector(".victory-popup");
-const bravo = document.querySelector(".bravo");
+const victoryMessage = document.querySelector(".victory-popup-text");
+const endgamePopup = document.querySelector(".endgame-popup");
 const victoryPopupButton = document.querySelector(".victory-popup-btn");
+const endgamePopupButton = document.querySelector(".endgame-popup-btn");
+const endgameMessage = document.querySelector(".endgame-popup-text");
+const startPopup = document.querySelector(".beforegame-popup");
+const inputPlayer1 = document.querySelector(".form__input--name-player-1");
+const inputPlayer2 = document.querySelector(".form__input--name-player-2");
+const app = document.querySelector(".app");
 
-let player;
+let currentPlayer;
+let player1;
+let player2;
 let turnCount;
 let winner;
 
@@ -24,9 +33,9 @@ class CaseCl {
       console.log("Tu passes ton tour");
       return;
     }
-    if (player === "player1") {
+    if (currentPlayer === player1) {
       this.filling = "X";
-    } else if (player === "player2") {
+    } else if (currentPlayer === player2) {
       this.filling = "O";
     }
     turnCount++;
@@ -62,6 +71,60 @@ const allCases = [
 ];
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helpers
+
+const showCasesContent = function () {
+  allCases.forEach((item) => item.displayCaseFilling());
+};
+
+const showPlayerPopup = function () {
+  if (currentPlayer === player1) {
+    player1Popup.classList.remove("hidden");
+    player2Popup.classList.add("hidden");
+  } else if (currentPlayer === player2) {
+    player2Popup.classList.remove("hidden");
+    player1Popup.classList.add("hidden");
+  }
+};
+
+const showVictoryPopup = function (winner) {
+  victoryPopup.classList.remove("hidden");
+  hidePlayer1popup();
+  hidePlayer2popup();
+  victoryPopupButton.addEventListener("click", startGame);
+  victoryMessage.textContent = `Bravo ${winner} !! Tu as gagné !!`;
+};
+
+const hideVictoryPopup = function () {
+  victoryPopup.classList.add("hidden");
+};
+
+const showEndgamePopup = function () {
+  endgamePopup.classList.remove("hidden");
+  endgamePopup.addEventListener("click", startGame);
+  endgameMessage.textContent = "Vous avez perdu tous les deux";
+};
+
+const showStartPopup = function () {
+  startPopup.classList.remove("hidden");
+};
+
+const hideStartPopup = function () {
+  startPopup.classList.add("hidden");
+};
+
+const hideEndgamePopup = function () {
+  endgamePopup.classList.add("hidden");
+};
+
+const hidePlayer1popup = function () {
+  player1Popup.classList.add("hidden");
+};
+
+const hidePlayer2popup = function () {
+  player2Popup.classList.add("hidden");
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Functions
 
@@ -73,21 +136,9 @@ const intializeCases = function () {
 };
 
 const changeTurn = function () {
-  player === "player1" ? (player = "player2") : (player = "player1");
-};
-
-const showCasesContent = function () {
-  allCases.forEach((item) => item.displayCaseFilling());
-};
-
-const showPlayerPopup = function () {
-  if (player === "player1") {
-    player1Popup.classList.remove("hidden");
-    player2Popup.classList.add("hidden");
-  } else if (player === "player2") {
-    player2Popup.classList.remove("hidden");
-    player1Popup.classList.add("hidden");
-  }
+  currentPlayer === player1
+    ? (currentPlayer = player2)
+    : (currentPlayer = player1);
 };
 
 const testForPlayer1Win = function () {
@@ -115,8 +166,7 @@ const testForPlayer1Win = function () {
       caseC3.filling === "X") ||
     (caseA3.filling === "X" && caseB2.filling === "X" && caseC1.filling === "X")
   ) {
-    console.log("Joueur 1 gagné");
-    winner = "player1";
+    winner = player1;
     showVictoryPopup(winner);
     boardgame.removeEventListener("click", playTurn);
   }
@@ -147,23 +197,16 @@ const testForPlayer2Win = function () {
       caseC3.filling === "O") ||
     (caseA3.filling === "O" && caseB2.filling === "O" && caseC1.filling === "O")
   ) {
-    console.log("Joueur 2 gagné");
-    winner = "player2";
+    winner = player2;
     showVictoryPopup(winner);
     boardgame.removeEventListener("click", playTurn);
   }
 };
 
-const showVictoryPopup = function (winner) {
-  victoryPopup.classList.remove("hidden");
-  victoryPopupButton.addEventListener("click", initGame);
-  bravo.insertAdjacentHTML("afterbegin", winner);
-};
-
 const testForWin = function () {
-  if (player === "player1") {
+  if (currentPlayer === player1) {
     testForPlayer1Win();
-  } else if (player === "player2") {
+  } else if (currentPlayer === player2) {
     testForPlayer2Win();
   }
   if (winner !== "") return true;
@@ -173,6 +216,7 @@ const testForEndGame = function () {
   if (winner !== "") return;
   if (turnCount === 9) {
     console.log("Le jeu est fini");
+    showEndgamePopup();
     boardgame.removeEventListener("click", playTurn);
     return true;
   }
@@ -198,6 +242,7 @@ const playTurn = function (e) {
   } else if (e.target.classList.contains("C3")) {
     caseC3.fillCase();
   }
+
   showCasesContent();
   if (testForWin() === true) return;
   if (testForEndGame() === true) return;
@@ -205,14 +250,30 @@ const playTurn = function (e) {
   showPlayerPopup();
 };
 
-const initGame = function () {
-  victoryPopup.classList.add("hidden");
+const startGame = function () {
+  app.classList.remove("hidden");
+  hideStartPopup();
+  hideVictoryPopup();
+  hideEndgamePopup();
   turnCount = 0;
   intializeCases();
-  player = "player1";
+  player1 = inputPlayer1.value;
+  player2 = inputPlayer2.value;
+  currentPlayer = player1;
   winner = "";
   player1Popup.classList.remove("hidden");
   boardgame.addEventListener("click", playTurn);
+};
+
+const launchGame = function (e) {
+  if (e.code === "Enter") {
+    startGame();
+  }
+};
+
+const initGame = function () {
+  app.classList.add("hidden");
+  startPopup.addEventListener("keydown", launchGame);
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

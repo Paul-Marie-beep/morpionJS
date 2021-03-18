@@ -9,52 +9,54 @@
     <title>Morpion</title>
   </head>
   <body>
-    <div class="boardgame">
-      <div class="case"></div>
-      <div class="case colrow colrow-letter">
-        <div class="colrow-text">A</div>
-      </div>
-      <div class="case colrow colrow-letter">
-        <div class="colrow-text">B</div>
-      </div>
-      <div class="case colrow colrow-letter">
-        <div class="colrow-text">C</div>
-      </div>
-      <div class="case colrow colrow-number">
-        <div class="colrow-text">1</div>
-      </div>
-      <div class="case gamecase border-top border-left A1">
-        <div class="gamecase-display A1"></div>
-      </div>
-      <div class="case gamecase border-top B1">
-        <div class="gamecase-display B1"></div>
-      </div>
-      <div class="case gamecase border-top border-right C1">
-        <div class="gamecase-display C1"></div>
-      </div>
-      <div class="case colrow colrow-number">
-        <div class="colrow-text">2</div>
-      </div>
-      <div class="case gamecase border-left A2">
-        <div class="gamecase-display A2"></div>
-      </div>
-      <div class="case gamecase B2">
-        <div class="gamecase-display B2"></div>
-      </div>
-      <div class="case gamecase border-right C2">
-        <div class="gamecase-display C2"></div>
-      </div>
-      <div class="case colrow colrow-number">
-        <div class="colrow-text">3</div>
-      </div>
-      <div class="case gamecase border-left border-bottom A3">
-        <div class="gamecase-display A3"></div>
-      </div>
-      <div class="case gamecase border-bottom B3">
-        <div class="gamecase-display B3"></div>
-      </div>
-      <div class="case gamecase border-bottom border-right C3">
-        <div class="gamecase-display C3"></div>
+    <div class="app">
+      <div class="boardgame">
+        <div class="case"></div>
+        <div class="case colrow colrow-letter">
+          <div class="colrow-text">A</div>
+        </div>
+        <div class="case colrow colrow-letter">
+          <div class="colrow-text">B</div>
+        </div>
+        <div class="case colrow colrow-letter">
+          <div class="colrow-text">C</div>
+        </div>
+        <div class="case colrow colrow-number">
+          <div class="colrow-text">1</div>
+        </div>
+        <div class="case gamecase border-top border-left A1">
+          <div class="gamecase-display A1"></div>
+        </div>
+        <div class="case gamecase border-top B1">
+          <div class="gamecase-display B1"></div>
+        </div>
+        <div class="case gamecase border-top border-right C1">
+          <div class="gamecase-display C1"></div>
+        </div>
+        <div class="case colrow colrow-number">
+          <div class="colrow-text">2</div>
+        </div>
+        <div class="case gamecase border-left A2">
+          <div class="gamecase-display A2"></div>
+        </div>
+        <div class="case gamecase B2">
+          <div class="gamecase-display B2"></div>
+        </div>
+        <div class="case gamecase border-right C2">
+          <div class="gamecase-display C2"></div>
+        </div>
+        <div class="case colrow colrow-number">
+          <div class="colrow-text">3</div>
+        </div>
+        <div class="case gamecase border-left border-bottom A3">
+          <div class="gamecase-display A3"></div>
+        </div>
+        <div class="case gamecase border-bottom B3">
+          <div class="gamecase-display B3"></div>
+        </div>
+        <div class="case gamecase border-bottom border-right C3">
+          <div class="gamecase-display C3"></div>
+        </div>
       </div>
     </div>
     <div class="player-popups">
@@ -73,12 +75,32 @@
         </div>
       </div>
     </div>
-    <div class="victory-popup hidden">
-      <div class="victory-popup-text">
-        <p class="bravo">Bravo</p>
-        <p>Tu as gagné</p>
-      </div>
+    <div class="aftergame-popup victory-popup hidden">
+      <div class="victory-popup-text aftergame-popup-text"></div>
       <button class="victory-popup-btn">Rejouer</button>
+    </div>
+    <div class="aftergame-popup endgame-popup hidden">
+      <div class="aftergame-popup-text endgame-popup-text"></div>
+      <button class="victory-popup-btn endgame-popup-btn">Rejouer</button>
+    </div>
+    <div class="beforegame-popup">
+      <div class="beforegame-popup-text">Écrivez vos noms</div>
+      <div class="form">
+        <div class="form__row names_player--1_form">
+          <label class="form__label label">Quel est ton prénom ?</label>
+          <input
+            class="form__input saisie form__input--name-player-1"
+            placeholder="Jacky"
+          />
+        </div>
+        <div class="form__row names_player--2_form">
+          <label class="form__label label">Quel est ton prénom ?</label>
+          <input
+            class="form__input saisie form__input--name-player-2"
+            placeholder="Michel"
+          />
+        </div>
+      </div>
     </div>
   </body>
 </html>
