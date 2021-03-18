@@ -23,7 +23,8 @@ let player1;
 let player2;
 let turnCount;
 let winner;
-let series;
+let series = [];
+let blinkInterval;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Case Object
@@ -131,6 +132,14 @@ const hidePlayer1popup = function () {
 const hidePlayer2popup = function () {
   player2Popup.classList.add("hidden");
 };
+
+const makeSureCaseContentNotHidden = function () {
+  if (series !== []) {
+    series.forEach((item) => {
+      document.querySelector(`.${item}`).classList.remove("hidden");
+    });
+  }
+};
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Functions
 
 // On vide les cases
@@ -147,10 +156,20 @@ const changeTurn = function () {
     : (currentPlayer = player1);
 };
 
+const startBlinkInterval = function () {
+  const blink = function () {
+    series.forEach((item) => {
+      document.querySelector(`.${item}`).classList.toggle("hidden");
+    });
+  };
+  blinkInterval = setInterval(blink, 800);
+};
+
 // On veut savoir quelle est la série gagnante pour pouvoir la faire clignoter
 const victoryDetected = function (series) {
   winner = currentPlayer;
   showVictoryPopup(winner);
+  startBlinkInterval();
   boardgame.removeEventListener("click", playTurn);
 };
 
@@ -161,56 +180,88 @@ const testForPlayerWin = function (currentPlayerSymbol) {
     caseA2.filling === currentPlayerSymbol &&
     caseA3.filling === currentPlayerSymbol
   ) {
-    series = "column_A";
+    series = [
+      "gamecase-display--A1",
+      "gamecase-display--A2",
+      "gamecase-display--A3",
+    ];
     victoryDetected(series);
   } else if (
     caseB1.filling === currentPlayerSymbol &&
     caseB2.filling === currentPlayerSymbol &&
     caseB3.filling === currentPlayerSymbol
   ) {
-    series = "column_B";
+    series = [
+      "gamecase-display--B1",
+      "gamecase-display--B2",
+      "gamecase-display--B3",
+    ];
     victoryDetected(series);
   } else if (
     caseC1.filling === currentPlayerSymbol &&
     caseC2.filling === currentPlayerSymbol &&
     caseC3.filling === currentPlayerSymbol
   ) {
-    series = "column_C";
+    series = [
+      "gamecase-display--C1",
+      "gamecase-display--C2",
+      "gamecase-display--C3",
+    ];
     victoryDetected(series);
   } else if (
     caseA1.filling === currentPlayerSymbol &&
     caseB1.filling === currentPlayerSymbol &&
     caseC1.filling === currentPlayerSymbol
   ) {
-    series = "line_1";
+    series = [
+      "gamecase-display--A1",
+      "gamecase-display--B1",
+      "gamecase-display--C1",
+    ];
     victoryDetected(series);
   } else if (
     caseA2.filling === currentPlayerSymbol &&
     caseB2.filling === currentPlayerSymbol &&
     caseC2.filling === currentPlayerSymbol
   ) {
-    series = "line_2";
+    series = [
+      "gamecase-display--A2",
+      "gamecase-display--B2",
+      "gamecase-display--C2",
+    ];
     victoryDetected(series);
   } else if (
     caseA3.filling === currentPlayerSymbol &&
     caseB3.filling === currentPlayerSymbol &&
     caseC3.filling === currentPlayerSymbol
   ) {
-    series = "line_3";
+    series = [
+      "gamecase-display--A3",
+      "gamecase-display--B3",
+      "gamecase-display--C3",
+    ];
     victoryDetected(series);
   } else if (
     caseA1.filling === currentPlayerSymbol &&
     caseB2.filling === currentPlayerSymbol &&
     caseC3.filling === currentPlayerSymbol
   ) {
-    series = "diago_left";
+    series = [
+      "gamecase-display--A1",
+      "gamecase-display--B2",
+      "gamecase-display--C3",
+    ];
     victoryDetected(series);
   } else if (
     caseA3.filling === currentPlayerSymbol &&
     caseB2.filling === currentPlayerSymbol &&
     caseC1.filling === currentPlayerSymbol
   ) {
-    series = "diago_right";
+    series = [
+      "gamecase-display--A3",
+      "gamecase-display--B2",
+      "gamecase-display--C1",
+    ];
     victoryDetected(series);
   }
 };
@@ -264,8 +315,10 @@ const playTurn = function (e) {
 };
 
 const startGame = function () {
+  clearInterval(blinkInterval);
   app.classList.remove("hidden");
-  series = "";
+  // À cause du clignotement, on doit s'assurer que le contenu des cases n'est pas caché
+  makeSureCaseContentNotHidden();
   hideStartPopup();
   hideVictoryPopup();
   hideEndgamePopup();
@@ -299,6 +352,7 @@ const launchGame = function (e) {
 const initGame = function () {
   app.classList.add("hidden");
   startPopup.addEventListener("keydown", launchGame);
+  clearInterval(blinkInterval);
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
