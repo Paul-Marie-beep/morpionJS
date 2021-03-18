@@ -13,6 +13,8 @@ const startPopup = document.querySelector(".beforegame-popup");
 const inputPlayer1 = document.querySelector(".form__input--name-player-1");
 const inputPlayer2 = document.querySelector(".form__input--name-player-2");
 const app = document.querySelector(".app");
+const playerNameOnPlayerPopup1 = document.querySelector(".player-number--1");
+const playerNameOnPlayerPopup2 = document.querySelector(".player-number--2");
 
 let currentPlayer;
 let player1;
@@ -81,9 +83,11 @@ const showPlayerPopup = function () {
   if (currentPlayer === player1) {
     player1Popup.classList.remove("hidden");
     player2Popup.classList.add("hidden");
+    playerNameOnPlayerPopup1.textContent = player1;
   } else if (currentPlayer === player2) {
     player2Popup.classList.remove("hidden");
     player1Popup.classList.add("hidden");
+    playerNameOnPlayerPopup2.textContent = player2;
   }
 };
 
@@ -261,13 +265,21 @@ const startGame = function () {
   player2 = inputPlayer2.value;
   currentPlayer = player1;
   winner = "";
-  player1Popup.classList.remove("hidden");
+  showPlayerPopup();
   boardgame.addEventListener("click", playTurn);
 };
 
 const launchGame = function (e) {
-  if (e.code === "Enter") {
+  if (
+    e.code === "Enter" &&
+    (inputPlayer1.value !== "" || inputPlayer2.value !== "")
+  ) {
     startGame();
+  } else if (
+    e.code === "Enter" &&
+    (inputPlayer1.value === "" || inputPlayer2.value === "")
+  ) {
+    alert("Vous devez rentrer un prénom");
   }
 };
 
