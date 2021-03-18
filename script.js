@@ -15,12 +15,15 @@ const inputPlayer2 = document.querySelector(".form__input--name-player-2");
 const app = document.querySelector(".app");
 const playerNameOnPlayerPopup1 = document.querySelector(".player-number--1");
 const playerNameOnPlayerPopup2 = document.querySelector(".player-number--2");
+const player1Symbol = "X";
+const player2Symbol = "0";
 
 let currentPlayer;
 let player1;
 let player2;
 let turnCount;
 let winner;
+let series;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Case Object
@@ -36,9 +39,9 @@ class CaseCl {
       return;
     }
     if (currentPlayer === player1) {
-      this.filling = "X";
+      this.filling = player1Symbol;
     } else if (currentPlayer === player2) {
-      this.filling = "O";
+      this.filling = player2Symbol;
     }
     turnCount++;
   }
@@ -128,10 +131,9 @@ const hidePlayer1popup = function () {
 const hidePlayer2popup = function () {
   player2Popup.classList.add("hidden");
 };
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Functions
 
-// Functions
-
+// On vide les cases
 const intializeCases = function () {
   allCases.forEach((item) => {
     item.filling = "";
@@ -145,73 +147,79 @@ const changeTurn = function () {
     : (currentPlayer = player1);
 };
 
-const testForPlayer1Win = function () {
-  if (
-    (caseA1.filling === "X" &&
-      caseA2.filling === "X" &&
-      caseA3.filling === "X") ||
-    (caseB1.filling === "X" &&
-      caseB2.filling === "X" &&
-      caseB3.filling === "X") ||
-    (caseC1.filling === "X" &&
-      caseC2.filling === "X" &&
-      caseC3.filling === "X") ||
-    (caseA1.filling === "X" &&
-      caseB1.filling === "X" &&
-      caseC1.filling === "X") ||
-    (caseA2.filling === "X" &&
-      caseB2.filling === "X" &&
-      caseC2.filling === "X") ||
-    (caseA3.filling === "X" &&
-      caseB3.filling === "X" &&
-      caseC3.filling === "X") ||
-    (caseA1.filling === "X" &&
-      caseB2.filling === "X" &&
-      caseC3.filling === "X") ||
-    (caseA3.filling === "X" && caseB2.filling === "X" && caseC1.filling === "X")
-  ) {
-    winner = player1;
-    showVictoryPopup(winner);
-    boardgame.removeEventListener("click", playTurn);
-  }
+// On veut savoir quelle est la série gagnante pour pouvoir la faire clignoter
+const victoryDetected = function (series) {
+  winner = currentPlayer;
+  showVictoryPopup(winner);
+  boardgame.removeEventListener("click", playTurn);
 };
 
-const testForPlayer2Win = function () {
+// On teste pour la victoire et on mémorise la série gagnante. On factorise le symbole pour n'avoir qu'une seule fonction de test
+const testForPlayerWin = function (currentPlayerSymbol) {
   if (
-    (caseA1.filling === "O" &&
-      caseA2.filling === "O" &&
-      caseA3.filling === "O") ||
-    (caseB1.filling === "O" &&
-      caseB2.filling === "O" &&
-      caseB3.filling === "O") ||
-    (caseC1.filling === "O" &&
-      caseC2.filling === "O" &&
-      caseC3.filling === "O") ||
-    (caseA1.filling === "O" &&
-      caseB1.filling === "O" &&
-      caseC1.filling === "O") ||
-    (caseA2.filling === "O" &&
-      caseB2.filling === "O" &&
-      caseC2.filling === "O") ||
-    (caseA3.filling === "O" &&
-      caseB3.filling === "O" &&
-      caseC3.filling === "O") ||
-    (caseA1.filling === "O" &&
-      caseB2.filling === "O" &&
-      caseC3.filling === "O") ||
-    (caseA3.filling === "O" && caseB2.filling === "O" && caseC1.filling === "O")
+    caseA1.filling === currentPlayerSymbol &&
+    caseA2.filling === currentPlayerSymbol &&
+    caseA3.filling === currentPlayerSymbol
   ) {
-    winner = player2;
-    showVictoryPopup(winner);
-    boardgame.removeEventListener("click", playTurn);
+    series = "column_A";
+    victoryDetected(series);
+  } else if (
+    caseB1.filling === currentPlayerSymbol &&
+    caseB2.filling === currentPlayerSymbol &&
+    caseB3.filling === currentPlayerSymbol
+  ) {
+    series = "column_B";
+    victoryDetected(series);
+  } else if (
+    caseC1.filling === currentPlayerSymbol &&
+    caseC2.filling === currentPlayerSymbol &&
+    caseC3.filling === currentPlayerSymbol
+  ) {
+    series = "column_C";
+    victoryDetected(series);
+  } else if (
+    caseA1.filling === currentPlayerSymbol &&
+    caseB1.filling === currentPlayerSymbol &&
+    caseC1.filling === currentPlayerSymbol
+  ) {
+    series = "line_1";
+    victoryDetected(series);
+  } else if (
+    caseA2.filling === currentPlayerSymbol &&
+    caseB2.filling === currentPlayerSymbol &&
+    caseC2.filling === currentPlayerSymbol
+  ) {
+    series = "line_2";
+    victoryDetected(series);
+  } else if (
+    caseA3.filling === currentPlayerSymbol &&
+    caseB3.filling === currentPlayerSymbol &&
+    caseC3.filling === currentPlayerSymbol
+  ) {
+    series = "line_3";
+    victoryDetected(series);
+  } else if (
+    caseA1.filling === currentPlayerSymbol &&
+    caseB2.filling === currentPlayerSymbol &&
+    caseC3.filling === currentPlayerSymbol
+  ) {
+    series = "diago_left";
+    victoryDetected(series);
+  } else if (
+    caseA3.filling === currentPlayerSymbol &&
+    caseB2.filling === currentPlayerSymbol &&
+    caseC1.filling === currentPlayerSymbol
+  ) {
+    series = "diago_right";
+    victoryDetected(series);
   }
 };
 
 const testForWin = function () {
   if (currentPlayer === player1) {
-    testForPlayer1Win();
+    testForPlayerWin(player1Symbol);
   } else if (currentPlayer === player2) {
-    testForPlayer2Win();
+    testForPlayerWin(player2Symbol);
   }
   if (winner !== "") return true;
 };
@@ -226,6 +234,7 @@ const testForEndGame = function () {
 };
 
 const playTurn = function (e) {
+  // On remplit la case (l'objet JS en l'occurence)
   if (e.target.classList.contains("A1")) {
     caseA1.fillCase();
   } else if (e.target.classList.contains("A2")) {
@@ -245,8 +254,9 @@ const playTurn = function (e) {
   } else if (e.target.classList.contains("C3")) {
     caseC3.fillCase();
   }
-
+  // On affiche le contenu des cases
   showCasesContent();
+  // On vérifie que la partie est toujours en cours
   if (testForWin() === true) return;
   if (testForEndGame() === true) return;
   changeTurn();
@@ -255,6 +265,7 @@ const playTurn = function (e) {
 
 const startGame = function () {
   app.classList.remove("hidden");
+  series = "";
   hideStartPopup();
   hideVictoryPopup();
   hideEndgamePopup();
