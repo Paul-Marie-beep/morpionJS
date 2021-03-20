@@ -11,6 +11,35 @@ body {
   display: none;
 }
 
+.score--game {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 90%;
+  margin: auto;
+}
+
+.score {
+  transform: translateY(-80%);
+}
+
+.score--player {
+  background-color: blanchedalmond;
+  border-radius: 10px;
+}
+
+.player-name {
+  color: green;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.score--display {
+  color: red;
+  font-size: 2rem;
+  font-weight: 900;
+}
+
 .boardgame {
   display: grid;
   grid-template-columns: repeat(4, 1fr);

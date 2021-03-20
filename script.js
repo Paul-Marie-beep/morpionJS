@@ -15,8 +15,12 @@ const inputPlayer2 = document.querySelector(".form__input--name-player-2");
 const app = document.querySelector(".app");
 const playerNameOnPlayerPopup1 = document.querySelector(".player-number--1");
 const playerNameOnPlayerPopup2 = document.querySelector(".player-number--2");
+const playerNameOnScorePopup1 = document.querySelector(".player-name-1");
+const playerNameOnScorePopup2 = document.querySelector(".player-name-2");
 const player1Symbol = "X";
 const player2Symbol = "0";
+const player1ScoreDisplay = document.querySelector(".score--player-1--display");
+const player2ScoreDisplay = document.querySelector(".score--player-2--display");
 
 let currentPlayer;
 let player1;
@@ -25,6 +29,8 @@ let turnCount;
 let winner;
 let series = [];
 let blinkInterval;
+let scorePlayer1 = 0;
+let scorePlayer2 = 0;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Case Object
@@ -35,9 +41,8 @@ class CaseCl {
   }
   fillCase() {
     if (this.filling !== "") {
-      console.log("Tu as joué sur une case déja pleine !!");
-      console.log("Tu passes ton tour");
-      return;
+      alert("Tu ne peux pas choisir une case déja pleine !!");
+      playTurn();
     }
     if (currentPlayer === player1) {
       this.filling = player1Symbol;
@@ -81,6 +86,14 @@ const allCases = [
 
 const showCasesContent = function () {
   allCases.forEach((item) => item.displayCaseFilling());
+};
+
+const intializeGameParameters = function () {
+  player1 = inputPlayer1.value;
+  player2 = inputPlayer2.value;
+  currentPlayer = player1;
+  winner = "";
+  turnCount = 0;
 };
 
 const showPlayerPopup = function () {
@@ -140,6 +153,13 @@ const makeSureCaseContentNotHidden = function () {
     });
   }
 };
+
+const showScorePopups = function () {
+  playerNameOnScorePopup1.textContent = player1;
+  playerNameOnScorePopup2.textContent = player2;
+  player1ScoreDisplay.textContent = scorePlayer1;
+  player2ScoreDisplay.textContent = scorePlayer2;
+};
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Functions
 
 // On vide les cases
@@ -166,8 +186,10 @@ const startBlinkInterval = function () {
 };
 
 // On veut savoir quelle est la série gagnante pour pouvoir la faire clignoter
-const victoryDetected = function (series) {
+const victoryDetected = function () {
   winner = currentPlayer;
+  winner === player1 ? scorePlayer1++ : scorePlayer2++;
+  showScorePopups();
   showVictoryPopup(winner);
   startBlinkInterval();
   boardgame.removeEventListener("click", playTurn);
@@ -284,8 +306,7 @@ const testForEndGame = function () {
   }
 };
 
-const playTurn = function (e) {
-  // On remplit la case (l'objet JS en l'occurence)
+const detectCasePlayed = function (e) {
   if (e.target.classList.contains("A1")) {
     caseA1.fillCase();
   } else if (e.target.classList.contains("A2")) {
@@ -305,13 +326,21 @@ const playTurn = function (e) {
   } else if (e.target.classList.contains("C3")) {
     caseC3.fillCase();
   }
+};
+
+const playTurn = function (e) {
+  // On remplit la case (l'objet JS en l'occurence)
+  detectCasePlayed(e);
   // On affiche le contenu des cases
   showCasesContent();
   // On vérifie que la partie est toujours en cours
-  if (testForWin() === true) return;
+  if (testForWin() === true) {
+    return;
+  }
   if (testForEndGame() === true) return;
   changeTurn();
   showPlayerPopup();
+  showScorePopups();
 };
 
 const startGame = function () {
@@ -322,13 +351,10 @@ const startGame = function () {
   hideStartPopup();
   hideVictoryPopup();
   hideEndgamePopup();
-  turnCount = 0;
   intializeCases();
-  player1 = inputPlayer1.value;
-  player2 = inputPlayer2.value;
-  currentPlayer = player1;
-  winner = "";
+  intializeGameParameters();
   showPlayerPopup();
+  showScorePopups();
   boardgame.addEventListener("click", playTurn);
   startPopup.removeEventListener("keydown", launchGame);
 };
@@ -352,7 +378,6 @@ const launchGame = function (e) {
 const initGame = function () {
   app.classList.add("hidden");
   startPopup.addEventListener("keydown", launchGame);
-  clearInterval(blinkInterval);
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
