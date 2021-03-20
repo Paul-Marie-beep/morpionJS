@@ -20,24 +20,44 @@ body {
 }
 
 .score {
-  transform: translateY(-80%);
+  height: 25rem;
+  width: 20%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transform: translateY(-15%);
 }
 
 .score--player {
   background-color: blanchedalmond;
   border-radius: 10px;
+  margin-top: 0px;
+  height: 8em;
+  width: 100%;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .player-name {
   color: green;
   font-size: 1.5rem;
   font-weight: 600;
+  margin-top: 0.2rem;
+  text-align: center;
+}
+
+.ton--score {
+  margin-left: 5%;
 }
 
 .score--display {
   color: red;
   font-size: 2rem;
   font-weight: 900;
+  margin-bottom: 0.2rem;
 }
 
 .boardgame {
