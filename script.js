@@ -190,9 +190,9 @@ const victoryDetected = function () {
   winner = currentPlayer;
   winner === player1 ? scorePlayer1++ : scorePlayer2++;
   showScorePopups();
-  showVictoryPopup(winner);
   startBlinkInterval();
   boardgame.removeEventListener("click", playTurn);
+  setTimeout("showVictoryPopup(winner)", 3000);
 };
 
 // On teste pour la victoire et on mémorise la série gagnante. On factorise le symbole pour n'avoir qu'une seule fonction de test
