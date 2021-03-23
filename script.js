@@ -81,6 +81,8 @@ const allCases = [
   caseC3,
 ];
 
+// Turn object
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Helpers
 
@@ -328,6 +330,7 @@ const detectCasePlayed = function (e) {
   }
 };
 
+// Gestion de chaque tour
 const playTurn = function (e) {
   // On remplit la case (l'objet JS en l'occurence)
   detectCasePlayed(e);
@@ -343,6 +346,7 @@ const playTurn = function (e) {
   showScorePopups();
 };
 
+// Lancement de la partie
 const startGame = function () {
   clearInterval(blinkInterval);
   app.classList.remove("hidden");
@@ -359,6 +363,7 @@ const startGame = function () {
   startPopup.removeEventListener("keydown", launchGame);
 };
 
+// Filtrage des conditions du popup pour lancer la partie
 const launchGame = function (e) {
   if (e.code === "Enter" && inputPlayer1.value === inputPlayer2.value) {
     alert("Vous devez rentrer deux prénoms différents");
@@ -375,6 +380,7 @@ const launchGame = function (e) {
   }
 };
 
+// Gestion Pop Up de rentrée des noms
 const initGame = function () {
   app.classList.add("hidden");
   startPopup.addEventListener("keydown", launchGame);
